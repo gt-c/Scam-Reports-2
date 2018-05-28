@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 		await pchannel.setTopic("closed").then(() => {
 			message.react("✅").catch(function () { });
 		}).catch(() => {
-			message.reply("Couldn't close reports. Please try again. If error persists, change the channel topic to `closed` manually").catch(() => {
+			return message.reply("Couldn't close reports. Please try again. If error persists, change the channel topic to `closed` manually").catch(() => {
 				return message.author.send(`You attempted to use the \`close\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 			});
 		});
