@@ -11,7 +11,8 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 		"cancelreport - Removes your unread scam report",
 		"verify - Verifies your roblox account to your discord account",
 		"getinfo - Gets a user's roblox information",
-		"buypremium - Gives you a link to buy premium"
+		"buypremium - Gives you a link to buy premium",
+		"redeem - Redeems a premium code to get you premium"
 	];
 	var premiumcommands = [
 		"request - Requests something to be developed for you",
@@ -35,7 +36,8 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 		"countstatus - Sets the bot's status to the server count",
 		"setupdates - Sets the update command response",
 		"generate - Generates premium codes",
-		"puser - Toggles a user's premium status"
+		"puser - Toggles a user's premium status",
+		"resetcase - Resets case numbers for the report command"
 	];
 	publiccommands = publiccommands.map(v => `\`${prefix}` + v.split("-")[0].trim() + "` - " + v.split("-")[1].trim()).join("\n");
 	premiumcommands = premiumcommands.map(v => `\`${prefix}` + v.split("-")[0].trim() + "` - " + v.split("-")[1].trim()).join("\n");

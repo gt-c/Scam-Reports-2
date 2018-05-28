@@ -1,8 +1,14 @@
 module.exports.run = async (bot, message, args) => {
-	if (!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have permission to use this command!");
-	if (!args[0]) return message.reply("Please provide the new prefix!");
+	if (!message.member.hasPermission("MANAGE_GUILD")) return message.reply("You don't have permission to use this command!").catch(() => {
+		return message.author.send(`You attempted to use the \`setprefix\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+	});
+	if (!args[0]) return message.reply("Please provide the new prefix!").catch(() => {
+		return message.author.send(`You attempted to use the \`setprefix\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+	});
 	let prefix = args[0];
-	if (prefix.length > 5) return message.reply("The prefix cannot be more than 5 characters!");
+	if (prefix.length > 5) return message.reply("The prefix cannot be more than 5 characters!").catch(() => {
+		return message.author.send(`You attempted to use the \`setprefix\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+	});
 	bot.data.prefixes.splice(bot.data.prefixes.indexOf(bot.data.prefixes.find(value => value.guild === message.guild.id)), 1);
 	if(bot.data.prefixes.find(value => value.guild === message.guild.id)) bot.data.prefixes.find(value => value.guild === message.guild.id).msg.delete();
 	var prefixdatabase = bot.channels.find("name", "prefix-database");
@@ -24,6 +30,10 @@ module.exports.run = async (bot, message, args) => {
 		prefixdatabase.send(`${message.guild.id} ${prefix}`).then((newMessageTwo) => {
 			bot.data.prefixes.push({ msg: newMessageTwo, guild: message.guild.id, prefix: prefix });
 			message.react("\u2705");
+		}).catch(() => {
+			message.reply("Couldn't access the database to change your server's prefix!").catch(() => {
+				return message.author.send(`You attempted to use the \`setprefix\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+			});
 		});
 	}
 };

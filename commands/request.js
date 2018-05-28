@@ -31,17 +31,25 @@ module.exports.run = async (bot, message, args, prefix) => {
 		limit: 100
 	});
 	let usercheck = pusers.find(m => m.content === id);
-	if (!usercheck) return message.reply(`You must be a premium user to use this command! For more information, run \`${prefix}buypremium\`.`);
-	if (bot.data.inPrompt.find(value => value.id === message.author.id)) return message.reply("You are in a prompt somewhere else! Please cancel that prompt and try again");
+	if (!usercheck) return message.reply(`You must be a premium user to use this command! For more information, run \`${prefix}buypremium\`.`).catch(() => {
+		return message.author.send(`You attempted to use the \`request\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+	});
+	if (bot.data.inPrompt.find(value => value.id === message.author.id)) return message.reply("You are in a prompt somewhere else! Please cancel that prompt and try again").catch(() => {
+		return message.author.send(`You attempted to use the \`request\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+	});
 	var helloembed = new Discord.RichEmbed()
 		.setColor("#0000FF")
 		.setDescription("Hello! This is the request prompt! Abusing this will cause you to get your premium removed without a refund.");
 	await message.author.send(helloembed).catch(async () => {
 		bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
-		return message.reply("I could not DM you the prompt! Check your privacy settings and try again!");
+		return message.reply("I could not DM you the prompt! Check your privacy settings and try again!").catch(() => {
+			return message.author.send(`You attempted to use the \`request\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+		});
 	});
-	message.react("✅");
-	message.channel.send(`${message.author}, Prompt will continue in DMs! 📬`);
+	message.react("✅").catch(function () { });
+	message.channel.send(`${message.author}, Prompt will continue in DMs! 📬`).catch(() => {
+		return message.author.send(`You attempted to use the \`request\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+	});
 	bot.data.inPrompt.push({ id: message.author.id });
 	//---------------------------------------------------------------------------------------------------------------------------------
 	let rblxname = await awaitReply(message, "What is your roblox username?\nSay **cancel** to cancel prompt.", 300000);
@@ -58,7 +66,6 @@ module.exports.run = async (bot, message, args, prefix) => {
 	if (type === "**Prompt cancelled, no response after five minutes.**") {
 		bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 		return message.author.send(timelimitembed);
-
 	}
 	if (type === "cancel") {
 		bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
@@ -111,7 +118,7 @@ module.exports.run = async (bot, message, args, prefix) => {
 	var bye = new Discord.RichEmbed()
 		.setColor("#0000FF")
 		.setDescription("Your request was sent!");
-	await message.author.send(bye);
+	await message.author.send(bye).catch(function () { });
 };
 
 

@@ -1,10 +1,15 @@
-module.exports.run = async (bot, message) => {
-
-	if (message.author.id !== "245877990938902529") return;
+module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
+	if (permissionLevel !== 3) return;
 	let casechannel = bot.channels.find("id", "444588562793627668");
-	let casenu = await casechannel.fetchMessage("444593973764292618");
-	await casenu.edit("1");
-	message.react("✅");
+	casechannel.fetchMessage("444593973764292618").then((casenu) => {
+		casenu.edit("1").then(() => {
+			message.react("✅").catch(function () { });
+		}).catch(() => {
+			message.reply("Couldn't access the database to reset the case number!").catch(() => {
+				return message.author.send(`You attempted to use the \`resetcase\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+			});
+		});
+	});
 };
 
 module.exports.help = {
