@@ -4,7 +4,7 @@ const fs = require("fs");
 //const DBL = require("dblapi.js");
 //const request = require("request-promise-native");
 const bot = new Discord.Client({ disableEveryone: true });
-bot.data = { prefixes: [], inPrompt: [], blacklistedUsers: [], blacklistedGuilds: [] };
+bot.data = { prefixes: [], inPrompt: [], blacklistedUsers: [], blacklistedGuilds: [], scammers: [] };
 
 
 bot.counter = false;
@@ -68,6 +68,11 @@ bot.on("ready", async () => {
 		blacklistedguilds.forEach((blacklistedguild) => {
 			var guild = blacklistedguild.content;
 			bot.data.blacklistedGuilds.push({ msg: blacklistedguild, id: guild });
+		});
+	});
+	bot.channels.find("id", "444588565154889738").fetchMessages({ limit: 100 }).then((scammers) => {
+		scammers.forEach((scammer) => {
+			bot.data.scammers.push({ msg: scammer, id: scammer.content });
 		});
 	});
 	var prefixMessages = await getPrefixes();

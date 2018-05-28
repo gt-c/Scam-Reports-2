@@ -8,9 +8,7 @@ module.exports.run = async (bot, message, args) => {
 	if (member && member.roles.get("443898332029517824")
 		|| member.roles.get("443903247502147596")
 		|| member.roles.get("443867603103121410")) {
-		let channel = bot.channels.find("id", "444588565154889738");
 		let userid = args[0];
-		let messages = await channel.fetchMessages({ limit: 100 });
 		let post = bot.channels.find("id", "443959210817093642");
 		let msgs = await post.fetchMessages({ limit: 100 });
 
@@ -21,13 +19,12 @@ module.exports.run = async (bot, message, args) => {
 				return message.reply(`${err}. If error persists, contact support by doing !server.`);
 			});
 			if (errortf == true) return;
-			let auser = messages.find(m => m.content === `${user}`);
-			let carray = msgs.filter(m => RegExp(user, "gi").test(m.content));
-			let cuser = carray.first();
 
-			if (auser) {
-				auser.delete();
-				if (cuser) cuser.delete();
+			if (bot.data.scammers.find(value => value.id === user)) {
+				bot.data.scammers.find(value => value.id === user).msg.delete();
+				bot.data.scammers.splice(bot.data.scammers.indexOf(bot.data.scammers.find(value => value.id === user)), 1);
+				var inchannel = msgs.find(m => RegExp(user, "gi").test(m.content));
+				if(inchannel) inchannel.delete();
 				message.react("\u2705");
 				let mod = bot.channels.find("id", "444634075836448768");
 				let thing = new Discord.RichEmbed()

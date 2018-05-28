@@ -9,7 +9,6 @@ module.exports.run = async (bot, message, args) => {
 		|| member.roles.get("443867603103121410")) {
 		var channel = bot.channels.find("id", "444588565154889738");
 		var userid = args[0];
-		var messages = await channel.fetchMessages({ limit: 100 });
 		var post = bot.channels.find("id", "443959210817093642");
 		if (userid) {
 			var errortf = false;
@@ -19,9 +18,10 @@ module.exports.run = async (bot, message, args) => {
 			});
 			// message.channel.send(user)
 			if (errortf === true) return;
-			var auser = messages.find(m => m.content === `${user}`);
-			if (!auser) {
-				channel.send(`${user}`);
+			if (!bot.data.scammers.find(value => value.id === user)) {
+				channel.send(`${user}`).then((newmessage) => {
+					bot.data.scammers.push({ msg: newmessage, id: user });
+				});
 				post.send(`**${userid}**, https://www.roblox.com/users/${user}/profile`).catch(function () { });
 				message.react("\u2705").catch(function () { });
 				var mod = bot.channels.find("id", "444634075836448768");
