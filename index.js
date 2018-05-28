@@ -66,8 +66,8 @@ bot.on("ready", async () => {
 	});
 	bot.channels.find("id", "444588561858035723").fetchMessages({ limit: 100 }).then((blacklistedguilds) => {
 		blacklistedguilds.forEach((blacklistedguild) => {
-			var guildid = blacklistedguild.content;
-			bot.data.blacklistedGuilds.push({ msg: blacklistedguild, id: guildid });
+			var guild = blacklistedguild.content;
+			bot.data.blacklistedGuilds.push({ msg: blacklistedguild, id: guild });
 		});
 	});
 	var prefixMessages = await getPrefixes();
@@ -126,7 +126,7 @@ bot.on("message", async message => {
 	let messageArray = message.content.split(" ");
 	let cmd = messageArray[0].toLowerCase();
 	let args = messageArray.slice(1);
-	var rawPrefix = bot.data.prefixes.find(value => value.guildid === message.guild.id);
+	var rawPrefix = bot.data.prefixes.find(value => value.guild === message.guild.id);
 	var prefix;
 	if (!rawPrefix) prefix = botconfig.prefix;
 	if (rawPrefix) prefix = rawPrefix.prefix;
@@ -138,8 +138,8 @@ bot.on("message", async message => {
 	}
 	if ((message.isMemberMentioned(bot.user)) && (message.content.endsWith("prefix reset")) && (message.member.hasPermission("MANAGE_GUILD"))) {
 		if (prefix !== botconfig.prefix) {
-			bot.data.prefixes.splice(bot.data.prefixes.indexOf(bot.data.prefixes.find(value => value.guildid === message.guild.id)), 1);
-			bot.data.prefixes.find(value => value.guildid === message.guild.id).msg.delete();
+			bot.data.prefixes.splice(bot.data.prefixes.indexOf(bot.data.prefixes.find(value => value.guild === message.guild.id)), 1);
+			if(rawPrefix) rawPrefix.msg.delete();
 			message.react("\u2705");
 		} else {
 			message.react("\u2705");
