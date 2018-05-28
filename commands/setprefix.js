@@ -15,23 +15,41 @@ module.exports.run = async (bot, message, args) => {
 	var messages = await prefixdatabase.fetchMessages({ limit: 100 });
 	let dbguild = bot.guilds.get("443929284411654144");
 	if (messages.size === 100) {
-		await prefixdatabase.setName("o-prefix-database");
-		await dbguild.createChannel("prefix-database");
-		let newc = dbguild.channels.find("name", "prefix-database");
-		await newc.overwritePermissions(prefixdatabase.guild.id, {
-			READ_MESSAGES: false
+		await prefixdatabase.setName("o-prefix-database").catch(() => {
+			return message.reply("Couldn't access the database to change your server's prefix!").catch(() => {
+				return message.author.send(`You attempted to use the \`setprefix\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+			});
 		});
-		await newc.setParent("444587981874135051");
+		await dbguild.createChannel("prefix-database").catch(() => {
+			return message.reply("Couldn't access the database to change your server's prefix!").catch(() => {
+				return message.author.send(`You attempted to use the \`setprefix\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+			});
+		});
+		let newc = dbguild.channels.find("name", "prefix-database");
+		await newc.overwritePermissions(prefixdatabase.guild.id, {READ_MESSAGES: false}).catch(() => {
+			return message.reply("Couldn't access the database to change your server's prefix!").catch(() => {
+				return message.author.send(`You attempted to use the \`setprefix\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+			});
+		});
+		await newc.setParent("444587981874135051").catch(() => {
+			return message.reply("Couldn't access the database to change your server's prefix!").catch(() => {
+				return message.author.send(`You attempted to use the \`setprefix\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+			});
+		});
 		await newc.send(`${message.guild.id} ${prefix}`).then((newMessage) => {
 			bot.data.prefixes.push({ msg: newMessage, guild: message.guild.id, prefix: prefix });
 			message.react("\u2705");
+		}).catch(() => {
+			return message.reply("Couldn't access the database to change your server's prefix!").catch(() => {
+				return message.author.send(`You attempted to use the \`setprefix\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+			});
 		});
 	} else {
 		prefixdatabase.send(`${message.guild.id} ${prefix}`).then((newMessageTwo) => {
 			bot.data.prefixes.push({ msg: newMessageTwo, guild: message.guild.id, prefix: prefix });
 			message.react("\u2705");
 		}).catch(() => {
-			message.reply("Couldn't access the database to change your server's prefix!").catch(() => {
+			return message.reply("Couldn't access the database to change your server's prefix!").catch(() => {
 				return message.author.send(`You attempted to use the \`setprefix\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 			});
 		});
