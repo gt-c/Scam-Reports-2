@@ -4,7 +4,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 		.setTitle("Commands")
 		.setColor("#0000FF");
 	const TYPES = ["Public", "Premium", "Support", "Developer"],
-	      MAP = (command) => `\`${prefix}{command.help.name}\` - ${command.help.description}`;
+		MAP = (command) => `\`${prefix}${command.help.name}\` - ${command.help.description}`;
 	TYPES.forEach(type => {
 		if (type !== "Support" && type !== "Developer") {
 			commandsEmbed.addField(type, bot.commands.filter(command => command.help.type === type).map(MAP));
@@ -12,7 +12,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 			commandsEmbed.addField(type, bot.commands.filter(command => command.help.type === type).map(MAP));
 		}
 	});
-	
+
 	message.author.send({ embed: commandsEmbed }).then(() => {
 		message.react("\u2705").catch(function () {});
 	}).catch(() => {
