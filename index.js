@@ -144,15 +144,29 @@ bot.on("message", async message => {
 	if ((message.isMemberMentioned(bot.user)) && (message.content.endsWith("prefix reset")) && (message.member.hasPermission("MANAGE_GUILD"))) {
 		if (prefix !== botconfig.prefix) {
 			bot.data.prefixes.splice(bot.data.prefixes.indexOf(bot.data.prefixes.find(value => value.guild === message.guild.id)), 1);
-			if(rawPrefix) rawPrefix.msg.delete();
+			if (rawPrefix) rawPrefix.msg.delete();
 			message.react("\u2705");
 		} else {
 			message.react("\u2705");
 		}
 	}
+	let guild = bot.guilds.find("id", "443867131721941005");
+	var permissionLevel = 0;
+	if(guild.members.get(message.author.id)) {
+		var member = await guild.fetchMember(message.author.id);
+		if (member.roles) {
+			if (member.roles.get("443903247502147596")) permissionLevel = 1;
+			if (member.roles.get("443898332029517824")) permissionLevel = 2;
+			if (member.roles.get("443867603103121410")) permissionLevel = 3;
+		}
+	}
+	//0 = Non-Member or Non-Matching Roles
+	//1 = Moderators
+	//2 = Helper
+	//3 = Developers
 	if (!message.content.startsWith(prefix)) return;
 	let commandfile = bot.commands.get(cmd.slice(prefix.length));
 	if (!commandfile) return;
-	return commandfile.run(bot, message, args, prefix);
+	return commandfile.run(bot, message, args, prefix, permissionLevel);
 });
 bot.login(botconfig.token);
