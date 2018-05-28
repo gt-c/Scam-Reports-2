@@ -3,9 +3,24 @@ const Discord = require("discord.js");
 const fs = require("fs");
 //const DBL = require("dblapi.js");
 //const request = require("request-promise-native");
-const bot = new Discord.Client({ disableEveryone: true });
+const bot = new Discord.Client({
+	disableEveryone: true,
+	fetchAllMembers: true
+});
+bot.loaders = { enabledLoaders: [], disabledLoaders: [] };
 bot.data = { prefixes: [], inPrompt: [], blacklistedUsers: [], blacklistedGuilds: [], scammers: [], codes: [], pusers: [], timeout: []};
 bot.counter = false;
+
+fs.readdirSync(__dirname + "/load").forEach(file => {
+	try {
+		let loader = require("./load/" + file);
+		bot.loaders.enabledLoaders.push(loader);
+	} catch(err) {
+		bot.loaders.disabledLoaders.push(file);
+		console.log(`\nThe ${file} load module failed to load:`);
+		console.log(err);
+	}
+});
 
 process.on("unhandledRejection", console.error);
 bot.commands = new Discord.Collection();
@@ -35,6 +50,10 @@ fs.readdir("./commands/", (err, files) => {
 	});
 }*/
 bot.on("ready", async () => {
+	bot.loaders.enabledLoaders.forEach(loader => {
+		if (loader.run != null)
+			loader.run(bot);
+	});
 	console.log(`${bot.user.username} is online!`);
 	//postServerCount()
 	let upvotesholdingchannel = bot.channels.find("id", "448615839533498388");
