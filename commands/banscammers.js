@@ -1,8 +1,6 @@
 module.exports.run = async (bot, message) => {
 	if (message.member.hasPermission("BAN_MEMBERS")) {
-		var premiumUsers = await bot.channels.get("444588564056113162").fetchMessages({ limit: 100 });
-		premiumUsers = premiumUsers.map(user => user.content);
-		if (premiumUsers.includes(message.author.id)) {
+		if (bot.data.pusers.find(value => value.id === message.author.id)) {
 			if (!message.guild.member(bot.user).hasPermission("BAN_MEMBERS")) return message.reply("I do not have permissions to ban members in this server.").catch(function () { });
 			message.reply("Attempting to ban all scammers from this server (if any).");
 			var scammers = await bot.channels.get("444588565154889738").fetchMessages({ limit: 100 });

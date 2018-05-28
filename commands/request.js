@@ -25,13 +25,7 @@ module.exports.run = async (bot, message, args, prefix) => {
 	var cancelembed = new Discord.RichEmbed()
 		.setColor("#0000FF")
 		.setDescription("Prompt Cancelled");
-	let id = message.author.id;
-	let userschannel = bot.channels.find("id", "444588564056113162");
-	let pusers = await userschannel.fetchMessages({
-		limit: 100
-	});
-	let usercheck = pusers.find(m => m.content === id);
-	if (!usercheck) return message.reply(`You must be a premium user to use this command! For more information, run \`${prefix}buypremium\`.`).catch(() => {
+	if (!bot.data.pusers.find(value => value.id === message.author.id)) return message.reply(`You must be a premium user to use this command! For more information, run \`${prefix}buypremium\`.`).catch(() => {
 		return message.author.send(`You attempted to use the \`request\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 	});
 	if (bot.data.inPrompt.find(value => value.id === message.author.id)) return message.reply("You are in a prompt somewhere else! Please cancel that prompt and try again").catch(() => {

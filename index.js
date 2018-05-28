@@ -4,9 +4,7 @@ const fs = require("fs");
 //const DBL = require("dblapi.js");
 //const request = require("request-promise-native");
 const bot = new Discord.Client({ disableEveryone: true });
-bot.data = { prefixes: [], inPrompt: [], blacklistedUsers: [], blacklistedGuilds: [], scammers: [] };
-
-
+bot.data = { prefixes: [], inPrompt: [], blacklistedUsers: [], blacklistedGuilds: [], scammers: [], codes: [], pusers: [] };
 bot.counter = false;
 
 process.on("unhandledRejection", console.error);
@@ -73,6 +71,16 @@ bot.on("ready", async () => {
 	bot.channels.find("id", "444588565154889738").fetchMessages({ limit: 100 }).then((scammers) => {
 		scammers.forEach((scammer) => {
 			bot.data.scammers.push({ msg: scammer, id: scammer.content });
+		});
+	});
+	bot.channels.find("id", "444588560859791381").fetchMessages({ limit: 100 }).then((codes) => {
+		codes.forEach((code) => {
+			bot.data.codes.push({ msg: code, code: code.content });
+		});
+	});
+	bot.channels.find("id", "444588564056113162").fetchMessages({ limit: 100 }).then((pusers) => {
+		pusers.forEach((puser) => {
+			bot.data.pusers.push({ msg: puser, id: puser.content });
 		});
 	});
 	var prefixMessages = await getPrefixes();
@@ -152,7 +160,7 @@ bot.on("message", async message => {
 	}
 	let guild = bot.guilds.find("id", "443867131721941005");
 	var permissionLevel = 0;
-	if(guild.members.get(message.author.id)) {
+	if (guild.members.get(message.author.id)) {
 		var member = await guild.fetchMember(message.author.id);
 		if (member.roles) {
 			if (member.roles.get("443903247502147596")) permissionLevel = 1;

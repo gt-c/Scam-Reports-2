@@ -15,7 +15,9 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 	let i = 0;
 	while (i < number) {
 		var a = random(10);
-		await codeschannel.send(a).catch(() => {
+		await codeschannel.send(a).then((newmsg) => {
+			bot.data.codes.push({ msg: newmsg, code: a });
+		}).catch(() => {
 			return message.author.send("Stopped because I couldn't add anything to the database").catch(function () { });
 		});
 		await message.author.send(`${a},`).catch(function () { });
