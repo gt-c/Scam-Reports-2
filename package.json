@@ -6,6 +6,7 @@
 	"scripts": {
 		"test": "eslint . && eslint test/. --env mocha && mocha",
 		"start": "node index.js"
+		"fix": "eslint . --fix && eslint test/. --env mocha --fix"
 	},
 	"author": "ethanlaj#8805",
 	"license": "ISC",
