@@ -4,7 +4,7 @@ const fs = require("fs");
 //const DBL = require("dblapi.js");
 //const request = require("request-promise-native");
 const bot = new Discord.Client({ disableEveryone: true });
-bot.data = { prefixes: [], inPrompt: [], requestTimeout: [], blacklistedUsers: [], blacklistedGuilds: [] };
+bot.data = { prefixes: [], inPrompt: [], blacklistedUsers: [], blacklistedGuilds: [] };
 
 
 bot.counter = false;

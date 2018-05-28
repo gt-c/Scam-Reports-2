@@ -28,7 +28,7 @@ module.exports.run = async (bot, message) => {
 	if (bot.data.blacklistedGuilds.find(value => value.id === message.guild.id)) return message.reply("You cannot use this command because this guild is blacklisted from using this command!").catch(() => {
 		return message.author.send(`You attempted to use the \`report\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 	});
-	if (bot.data.inPrompt.find(m => m.userid === message.author.id)) return message.reply("You are already in a prompt with the bot! Please cancel that prompt and try again.").catch(() => {
+	if (bot.data.inPrompt.find(m => m.id === message.author.id)) return message.reply("You are already in a prompt with the bot! Please cancel that prompt and try again.").catch(() => {
 		return message.author.send(`You attempted to use the \`report\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 	});
 	var cancelembed = new Discord.RichEmbed()
@@ -49,26 +49,26 @@ module.exports.run = async (bot, message) => {
 	message.channel.send(`${message.author}, Prompt will continue in DMs! 📬`).catch(() => {
 		return message.author.send(`You attempted to use the \`report\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 	});
-	bot.data.inPrompt.push({ userid: message.author.id });
+	bot.data.inPrompt.push({ id: message.author.id });
 	//----------------------------------------------------------------------------------------------------------------------------------
 	var rblxname = await awaitReply(message, "What is the scammer's roblox username?\nSay **cancel** to cancel prompt.", 300000);
 	if (rblxname === "Prompt cancelled, no response after five minutes") {
 		await message.author.send(timelimitembed).catch(function () { });
-		return bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+		return bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 	}
 	if (rblxname.content && rblxname.content.toLowerCase() === "cancel") {
-		bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+		bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 		return await message.author.send(cancelembed).catch(function () { });
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------
 	let urrblxname = await awaitReply(message, "What is your roblox username?\nSay **cancel** to cancel prompt.", 300000);
 	if (urrblxname.content.toLowerCase() === "cancel") {
-		await bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+		await bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 		return await message.author.send(cancelembed).catch(function () { });
 	}
 	if (urrblxname === "Prompt cancelled, no response after five minutes") {
 		await message.author.send(timelimitembed).catch(function () { });
-		return bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+		return bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------
 	const proofembed = new Discord.RichEmbed()
@@ -86,14 +86,14 @@ module.exports.run = async (bot, message) => {
 				collector.stop();
 			}
 			if (m.content.toLowerCase() === "cancel") {
-				bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+				bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 
 				return await message.author.send(cancelembed).catch(function () { });
 			}
 		});
 		collector.on("end", async function (collected) {
 			if (!collected.first()) {
-				bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+				bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 
 				return message.author.send(timelimitembed).catch(function () { });
 			}
@@ -101,7 +101,7 @@ module.exports.run = async (bot, message) => {
 				const byeembed = new Discord.RichEmbed()
 					.setColor("#0000FF")
 					.setDescription("You must provide at least some kind of proof! Prompt cancelled.");
-				bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+				bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 
 				return await message.author.send(byeembed).catch(function () { });
 			}
@@ -121,29 +121,29 @@ module.exports.run = async (bot, message) => {
 		.setColor("#0000FF")
 		.setDescription("You must provide at least some kind of proof! Prompt cancelled.");
 	if (proof === "\n") {
-		await bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+		await bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 		return message.author.send(byeembedo).catch(function () { });
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------
 	let describe = await awaitReply(message, "How were you scammed? Explain anything we need to know here.\nSay **cancel** to cancel prompt.", 300000);
 	if (describe.content && describe.content.toLowerCase() === "cancel") {
-		bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+		bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 		return await message.author.send(cancelembed).catch(function () { });
 	}
 	if (describe === "Prompt cancelled, no response after five minutes") {
 		await message.author.send(timelimitembed).catch(function () { });
-		return await bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+		return await bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------
 	const confirm = await awaitReply(message, `**The following information will be sent:**\nScammer's Roblox Username: ${rblxname}\nYour Roblox Username: ${urrblxname}\nProof Of Scam: ${proof}\nOther Information: ${describe}\n---------------------------------------\nSay **confirm** to send the report.\nSay **cancel** to cancel the prompt.`, 300000);
 	if (confirm.content && confirm.content.toLowerCase() === "cancel") {
-		bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+		bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 		return message.author.send(cancelembed).catch(function () { });
 	}
 	if (confirm === "Prompt cancelled, no response after five minutes") {
 		await message.author.send(timelimitembed).catch(function () { });
-		return await bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+		return await bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------
@@ -167,7 +167,7 @@ module.exports.run = async (bot, message) => {
 		.addField("Proof Of Scam", proof)
 		.addField("Description", describe);
 	reportchannel.send(reportEmbed).catch(function () { });
-	bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.userid === message.author.id)), 1);
+	bot.data.inPrompt.splice(bot.data.inPrompt.indexOf(bot.data.inPrompt.find(m => m.id === message.author.id)), 1);
 	var hmmtho = new Discord.RichEmbed()
 		.setColor("#0000FF")
 		.setDescription("✅ **Successfully Submitted! -- Your Response Was Submitted And Will Be Reviewed By Our Admins And Moderators Shortly!** ✅");
