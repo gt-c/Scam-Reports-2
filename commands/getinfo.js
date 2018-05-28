@@ -35,9 +35,7 @@ async function everything(args, message, bot) {
 	message.channel.send("Loading...").then(m => {
 		dbchannels.forEach(dbchannel => {
 			count2 = count2 + 1;
-			dbchannel.fetchMessages({
-				limit: 100
-			}).then(messages => {
+			dbchannel.fetchMessages({ limit: 100 }).then(messages => {
 				messages.forEach(async msg => {
 					if (msg.content.startsWith(`${target.id}`)) {
 						count = count - 1;
@@ -66,8 +64,14 @@ async function everything(args, message, bot) {
 					count = count + 1;
 					if (count == messages.size && count2 == dbchannels.size) return m.edit(`${target.user.tag} is not verified, please tell them to run \`!verify\``);
 				});
+			}).catch(() => {
+				return message.reply("Couldn't fetch data from the database. Please try again.").catch(() => {
+					return message.author.send(`You attempted to use the \`getinfo\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+				});
 			});
 		});
+	}).catch(() => {
+		return message.author.send(`You attempted to use the \`getinfo\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 	});
 }
 

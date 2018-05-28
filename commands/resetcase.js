@@ -5,9 +5,13 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 		casenu.edit("1").then(() => {
 			message.react("✅").catch(function () { });
 		}).catch(() => {
-			message.reply("Couldn't access the database to reset the case number!").catch(() => {
+			return message.reply("Couldn't access the database to reset the case number!").catch(() => {
 				return message.author.send(`You attempted to use the \`resetcase\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 			});
+		});
+	}).catch(() => {
+		message.reply("Couldn't reach the database to reset the case number").catch(() => {
+			return message.author.send(`You attempted to use the \`resetcase\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 		});
 	});
 };

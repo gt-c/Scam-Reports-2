@@ -45,8 +45,12 @@ bot.on("ready", async () => {
 			upvoter = await bot.fetchUser(msg.content);
 			upvotessend.send(`Many thanks to ${upvoter.tag} for upvoting our bot!`).then(() => {
 				msg.delete();
+			}).catch(() => {
+				console.log("Couldn't access the vote posting channel.");
 			});
 		});
+	}).catch(() => {
+		console.log("Couldn't access the database.");
 	});
 	//---------------------------------------------------------------------------------------------------------------------------------- load data
 	let dbguild = bot.guilds.get("443929284411654144");
@@ -61,27 +65,37 @@ bot.on("ready", async () => {
 			var userid = blacklisteduser.content;
 			bot.data.blacklistedUsers.push({ msg: blacklisteduser, id: userid });
 		});
+	}).catch(() => {
+		console.log("Couldn't access the database.");
 	});
 	bot.channels.find("id", "444588561858035723").fetchMessages({ limit: 100 }).then((blacklistedguilds) => {
 		blacklistedguilds.forEach((blacklistedguild) => {
 			var guild = blacklistedguild.content;
 			bot.data.blacklistedGuilds.push({ msg: blacklistedguild, id: guild });
 		});
+	}).catch(() => {
+		console.log("Couldn't access the database.");
 	});
 	bot.channels.find("id", "444588565154889738").fetchMessages({ limit: 100 }).then((scammers) => {
 		scammers.forEach((scammer) => {
 			bot.data.scammers.push({ msg: scammer, id: scammer.content });
 		});
+	}).catch(() => {
+		console.log("Couldn't access the database.");
 	});
 	bot.channels.find("id", "444588560859791381").fetchMessages({ limit: 100 }).then((codes) => {
 		codes.forEach((code) => {
 			bot.data.codes.push({ msg: code, code: code.content });
 		});
+	}).catch(() => {
+		console.log("Couldn't access the database.");
 	});
 	bot.channels.find("id", "444588564056113162").fetchMessages({ limit: 100 }).then((pusers) => {
 		pusers.forEach((puser) => {
 			bot.data.pusers.push({ msg: puser, id: puser.content });
 		});
+	}).catch(() => {
+		console.log("Couldn't access the database.");
 	});
 	var prefixMessages = await getPrefixes();
 	prefixMessages.forEach((prefixMessage) => {
@@ -98,6 +112,8 @@ bot.on("ready", async () => {
 			type: "STREAMING",
 			url: user.presence.game.url
 		});
+	}).catch(() => {
+		console.log("Couldn't set the status for Scooby's streaming module.");
 	});
 	await bot.user.setActivity("for !help", { type: "WATCHING" });
 });
@@ -132,6 +148,8 @@ bot.on("message", async message => {
 		upvoter = await bot.fetchUser(message.content);
 		upvotessend.send(`Many thanks to ${upvoter.tag} for upvoting our bot!`).then(() => {
 			message.delete();
+		}).catch(() => {
+			console.log("Couldn't access the vote posting channel.");
 		});
 	}
 	if (message.author.bot) return;

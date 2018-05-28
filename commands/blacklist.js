@@ -15,6 +15,10 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 				});
 				channel.send(`${pingeduser.id}`).then((newMsg) => {
 					bot.data.blacklistedUsers.push({ msg: newMsg, id: pingeduser.id });
+				}).catch(() => {
+					return message.reply("Couldn't access the database to blacklist this user. Please try again.").catch(() => {
+						return message.author.send(`You attempted to use the \`blacklist\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+					});
 				});
 				message.react("\u2705").catch(function () { });
 				blacklistEmbed = blacklistEmbed
@@ -34,6 +38,10 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 				});
 				channel.send(`${userid}`).then((newMessage) => {
 					bot.data.blacklistedUsers.push({ msg: newMessage, id: userid });
+				}).catch(() => {
+					return message.reply("Couldn't access the database to blacklist this user. Please try again.").catch(() => {
+						return message.author.send(`You attempted to use the \`blacklist\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+					});
 				});
 				message.react("\u2705").catch(function () { });
 				blacklistEmbed = blacklistEmbed

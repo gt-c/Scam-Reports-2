@@ -66,7 +66,15 @@ async function everything(bot, message) {
 									}
 								}
 							});
+						}).catch(() => {
+							return message.reply("Couldn't access the database, please try again.").catch(() => {
+								return message.author.send(`You attempted to use the \`verify\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
+							});
 						});
+					});
+				}).catch(() => {
+					return message.reply("Couldn't access the database, please try again.").catch(() => {
+						return message.author.send(`You attempted to use the \`verify\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 					});
 				});
 			} else {
@@ -90,6 +98,10 @@ async function everything(bot, message) {
 									dbchannel.send(`${message.author.id} ${userid}`);
 								}
 							}
+						});
+					}).catch(() => {
+						return message.reply("Couldn't access the database, please try again.").catch(() => {
+							return message.author.send(`You attempted to use the \`verify\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 						});
 					});
 				});

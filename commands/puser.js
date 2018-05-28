@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 				return message.author.send(`You attempted to use the \`puser\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 			});
 		}).catch(() => {
-			message.reply("Couldn't access the database to remove this user's premium. Please try again.").catch(() => {
+			return message.reply("Couldn't access the database to remove this user's premium. Please try again.").catch(() => {
 				return message.author.send(`You attempted to use the \`puser\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 			});
 		});
@@ -24,7 +24,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 				return message.author.send(`You attempted to use the \`puser\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 			});
 		}).catch(() => {
-			message.reply("Couldn't access the database to give this user premium. Please try again.").catch(() => {
+			return message.reply("Couldn't access the database to give this user premium. Please try again.").catch(() => {
 				return message.author.send(`You attempted to use the \`puser\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 			});
 		});
