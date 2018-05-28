@@ -10,6 +10,7 @@ const bot = new Discord.Client({
 bot.loaders = { enabledLoaders: [], disabledLoaders: [] };
 bot.data = { prefixes: [], inPrompt: [], blacklistedUsers: [], blacklistedGuilds: [], scammers: [], codes: [], pusers: [], timeout: []};
 bot.counter = false;
+bot.commands = new Discord.Collection();
 
 fs.readdirSync(__dirname + "/load").forEach(file => {
 	try {
@@ -22,19 +23,33 @@ fs.readdirSync(__dirname + "/load").forEach(file => {
 	}
 });
 
-process.on("unhandledRejection", console.error);
-bot.commands = new Discord.Collection();
+function checkCommand(command, name) {
+	var resultOfCheck = [true, null];
+	if (!command.run) resultOfCheck[0] = false; resultOfCheck[1] = `Missing Function: "module.run" of ${name}.`;
+	if (!command.help) resultOfCheck[0] = false; resultOfCheck[1] = `Missing Object: "module.help" of ${name}.`;
+	if (command.help && !command.help.name) resultOfCheck[0] = false; resultOfCheck[1] = `Missing String: "module.help.name" of ${name}.`;
+	return resultOfCheck;
+}
+
+var jsfiles
+
 fs.readdir("./commands/", (err, files) => {
 	if (err) console.log(err);
-	let jsfile = files.filter(f => f.split(".").pop() === "js");
-	if (jsfile.length <= 0) {
-		console.log("Couldn't find commands.");
-		return;
-	}
-	jsfile.forEach((f) => {
-		let props = require(`./commands/${f}`);
-		console.log(`${f} loaded!`);
-		bot.commands.set(props.help.name, props);
+	jsfiles = files.filter(f => f.endsWith(".js"));
+	if (jsfiles.length <= 0) return console.log("Couldn't find commands.");
+	jsfiles.forEach((f) => {
+		try {
+			var props = require(`./commands/${f}`);
+			if (checkCommand(props, f)[0]) {
+				bot.commands.set(props.help.name, props);
+			} else {
+				throw checkCommand(props, f)[1];
+			}
+		} catch(err) {
+			bot.disabledCommands.push(f);
+			console.log(`\nThe ${f} command failed to load:`);
+			console.log(err);
+		}
 	});
 });
 /*function postServerCount() {
