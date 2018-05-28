@@ -13,5 +13,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 	}
 };
 module.exports.help = {
-	name: "setupdates"
+	name: "setupdates",
+	description: "Sets the update command response",
+	type: "Developer"
 };

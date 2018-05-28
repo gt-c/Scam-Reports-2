@@ -20,5 +20,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 };
 
 module.exports.help = {
-	name: "close"
+	name: "close",
+	description: "Closes the report command",
+	type: "Support"
 };

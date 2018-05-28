@@ -4,5 +4,7 @@ module.exports.run = async (bot, message) => {
 	});
 };
 module.exports.help = {
-	name: "ping"
+	name: "ping",
+	description: "Responds with the bot's ping",
+	type: "Public"
 };

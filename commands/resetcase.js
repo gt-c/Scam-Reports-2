@@ -17,5 +17,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 };
 
 module.exports.help = {
-	name: "resetcase"
+	name: "resetcase",
+	description: "Resets case numbers for the report command",
+	type: "Developer"
 };

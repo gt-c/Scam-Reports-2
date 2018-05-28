@@ -25,5 +25,7 @@ module.exports.run = async (bot, message, args) => {
 
 };
 module.exports.help = {
-	name: "redeem"
+	name: "redeem",
+	description: "Redeems a premium code to get you premium",
+	type: "Public"
 };

@@ -32,5 +32,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 
 };
 module.exports.help = {
-	name: "puser"
+	name: "puser",
+	description: "Toggles a user's premium status",
+	type: "Developer"
 };

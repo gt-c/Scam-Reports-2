@@ -28,5 +28,7 @@ module.exports.run = async (bot, message) => {
 };
 
 module.exports.help = {
-	name: "cancelreport"
+	name: "cancelreport",
+	description: "Removes your unread scam report",
+	type: "Public"
 };

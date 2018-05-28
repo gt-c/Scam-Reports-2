@@ -28,5 +28,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 	});
 };
 module.exports.help = {
-	name: "generate"
+	name: "generate",
+	description: "Generates premium codes",
+	type: "Developer"
 };

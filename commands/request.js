@@ -117,5 +117,7 @@ module.exports.run = async (bot, message, args, prefix) => {
 
 
 module.exports.help = {
-	name: "request"
+	name: "request",
+	description: "Requests something to be developed for you",
+	type: "Premium"
 };

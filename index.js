@@ -4,7 +4,7 @@ const fs = require("fs");
 //const DBL = require("dblapi.js");
 //const request = require("request-promise-native");
 const bot = new Discord.Client({ disableEveryone: true });
-bot.data = { prefixes: [], inPrompt: [], blacklistedUsers: [], blacklistedGuilds: [], scammers: [], codes: [], pusers: [] };
+bot.data = { prefixes: [], inPrompt: [], blacklistedUsers: [], blacklistedGuilds: [], scammers: [], codes: [], pusers: [], timeout: []};
 bot.counter = false;
 
 process.on("unhandledRejection", console.error);
@@ -154,26 +154,37 @@ bot.on("message", async message => {
 	}
 	if (message.author.bot) return;
 	if (message.channel.type === "dm") return;
-	let messageArray = message.content.split(" ");
-	let cmd = messageArray[0].toLowerCase();
-	let args = messageArray.slice(1);
+	var messageArray = message.content.split(" ");
+	var cmd = messageArray[0].toLowerCase();
+	var args = messageArray.slice(1);
 	var rawPrefix = bot.data.prefixes.find(value => value.guild === message.guild.id);
 	var prefix;
 	if (!rawPrefix) prefix = botconfig.prefix;
 	if (rawPrefix) prefix = rawPrefix.prefix;
 	if ((message.isMemberMentioned(bot.user)) && (message.content.endsWith("prefix"))) {
+		if(bot.data.timeout.find(value => value.id === message.author.id)) return message.reply("You cannot use this command yet!");
+		bot.data.timeout.push({ id: message.author.id });
+		bot.setTimeout(function() {
+			bot.data.timeout.splice(bot.data.timeout.indexOf(bot.data.timeout.find(value => value.id === message.author.id)), 1);
+		}, 2000);
 		return message.reply(`My prefix is \`${prefix}\``);
 	}
-	if ((message.author === bot.user) && (message.channel.id === "434152264135868418") && (message.content.endsWith("request timeout"))) {
-		message.delete(180000);
-	}
 	if ((message.isMemberMentioned(bot.user)) && (message.content.endsWith("prefix reset")) && (message.member.hasPermission("MANAGE_GUILD"))) {
+		if(bot.data.timeout.find(value => value.id === message.author.id)) return message.reply("You cannot use this command yet!");
 		if (prefix !== botconfig.prefix) {
 			bot.data.prefixes.splice(bot.data.prefixes.indexOf(bot.data.prefixes.find(value => value.guild === message.guild.id)), 1);
 			if (rawPrefix) rawPrefix.msg.delete();
-			message.react("\u2705");
+			bot.data.timeout.push({ id: message.author.id });
+			bot.setTimeout(function() {
+				bot.data.timeout.splice(bot.data.timeout.indexOf(bot.data.timeout.find(value => value.id === message.author.id)), 1);
+			}, 2000);
+			return message.react("\u2705");
 		} else {
-			message.react("\u2705");
+			bot.data.timeout.push({ id: message.author.id });
+			bot.setTimeout(function() {
+				bot.data.timeout.splice(bot.data.timeout.indexOf(bot.data.timeout.find(value => value.id === message.author.id)), 1);
+			}, 2000);
+			return message.react("\u2705");
 		}
 	}
 	let guild = bot.guilds.find("id", "443867131721941005");
@@ -190,9 +201,27 @@ bot.on("message", async message => {
 	//1 = Moderators
 	//2 = Helper
 	//3 = Developers
-	if (!message.content.startsWith(prefix)) return;
-	let commandfile = bot.commands.get(cmd.slice(prefix.length));
-	if (!commandfile) return;
-	return commandfile.run(bot, message, args, prefix, permissionLevel);
+	if (message.content.startsWith(prefix)) {
+		let commandfile = bot.commands.get(cmd.slice(prefix.length));
+		if (!commandfile) return;
+		if(bot.data.timeout.find(value => value.id === message.author.id)) return message.reply("You cannot use this command yet!");
+		bot.setTimeout(function() {
+			bot.data.timeout.splice(bot.data.timeout.indexOf(bot.data.timeout.find(value => value.id === message.author.id)), 1);
+		}, 2000);
+		bot.data.timeout.push({ id: message.author.id });
+		return commandfile.run(bot, message, args, prefix, permissionLevel);
+	} else if (message.content.startsWith(`<@${bot.user.id}>`)) {
+		let commandfile = bot.commands.get(args[0]);
+		if (!commandfile) return;
+		message.content = message.content.replace(`<@${bot.user.id}> `, `${prefix}`);
+		messageArray = message.content.split(" ");
+		args = messageArray.slice(1);
+		if(bot.data.timeout.find(value => value.id === message.author.id)) return message.reply("You cannot use this command yet!");
+		bot.setTimeout(function() {
+			bot.data.timeout.splice(bot.data.timeout.indexOf(bot.data.timeout.find(value => value.id === message.author.id)), 1);
+		}, 2000);
+		bot.data.timeout.push({ id: message.author.id });
+		return commandfile.run(bot, message, args, prefix, permissionLevel);
+	}
 });
 bot.login(botconfig.token);

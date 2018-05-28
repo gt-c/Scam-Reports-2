@@ -190,5 +190,7 @@ module.exports.run = async (bot, message) => {
 	await mod.send(areportEmbed).catch(function () { });
 };
 module.exports.help = {
-	name: "report"
+	name: "report",
+	description: "Starts a prompt to report a scammer and send that prompt to the support server",
+	type: "Public"
 };

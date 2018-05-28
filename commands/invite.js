@@ -4,5 +4,7 @@ module.exports.run = async (bot, message) => {
 	});
 };
 module.exports.help = {
-	name: "invite"
+	name: "invite",
+	description: "Sends you my invite",
+	type: "Public"
 };

@@ -31,5 +31,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 };
 
 module.exports.help = {
-	name: "guildblacklist"
+	name: "guildblacklist",
+	description: "Blacklists a server from using the report command",
+	type: "Support"
 };

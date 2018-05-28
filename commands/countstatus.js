@@ -23,5 +23,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 };
 
 module.exports.help = {
-	name: "countstatus"
+	name: "countstatus",
+	description: "Sets the bot's status to the server count",
+	type: "Developer"
 };

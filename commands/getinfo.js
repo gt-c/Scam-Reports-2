@@ -79,5 +79,7 @@ module.exports.run = async (bot, message, args) => {
 	everything(args, message, bot);
 };
 module.exports.help = {
-	name: "getinfo"
+	name: "getinfo",
+	description: "Gets a user's roblox information",
+	type: "Public"
 };

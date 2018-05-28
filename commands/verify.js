@@ -118,5 +118,7 @@ module.exports.run = async (bot, message) => {
 	everything(bot, message);
 };
 module.exports.help = {
-	name: "verify"
+	name: "verify",
+	description: "Verifies your roblox account to your discord account",
+	type: "Public"
 };

@@ -4,5 +4,7 @@ module.exports.run = async (bot, message) => {
 	});
 };
 module.exports.help = {
-	name: "count"
+	name: "count",
+	description: "Gives you our bot's server count",
+	type: "Public"
 };

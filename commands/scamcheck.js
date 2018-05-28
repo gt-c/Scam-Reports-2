@@ -21,5 +21,7 @@ module.exports.run = async (bot, message, args) => {
 };
 
 module.exports.help = {
-	name: "scamcheck"
+	name: "scamcheck",
+	description: "Tells you whether the username you provided is in our scam database or not",
+	type: "Public"
 };

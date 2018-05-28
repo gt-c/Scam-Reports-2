@@ -5,5 +5,7 @@ module.exports.run = async (bot, message) => {
 	});
 };
 module.exports.help = {
-	name: "server"
+	name: "server",
+	description: "Sends you the invite to the support server",
+	type: "Public"
 };

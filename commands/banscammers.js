@@ -23,5 +23,7 @@ module.exports.run = async (bot, message) => {
 	}
 };
 module.exports.help = {
-	name: "banscammers"
+	name: "banscammers",
+	description: "Bans all scammmers from your server",
+	type: "Premium"
 };

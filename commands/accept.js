@@ -39,5 +39,7 @@ module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 	}
 };
 module.exports.help = {
-	name: "accept"
+	name: "accept",
+	description: "Accepts a user's scam report",
+	type: "Support"
 };
