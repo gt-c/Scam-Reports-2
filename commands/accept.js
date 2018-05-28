@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
-
-module.exports.run = async (bot, message, args, permissionLevel) => {
+module.exports.run = async (bot, message, args, prefix, permissionLevel) => {
 	if (permissionLevel > 0) {
 		let casenumber = args[0];
 		if (!casenumber) return message.reply("Please provide a case number!").catch(() => {
@@ -27,7 +26,7 @@ module.exports.run = async (bot, message, args, permissionLevel) => {
 				return message.author.send(`You attempted to use the \`accept\` command in ${message.channel}, but I can not chat there.`).catch(function () { });
 			});
 		});
-		let mod = bot.channels.find("id", "444634075836448768");
+		let logs = bot.channels.find("id", "444634075836448768");
 		const acceptedReport = new Discord.RichEmbed()
 			.setTitle("Accepted Report")
 			.setColor("#FF0000")
@@ -35,12 +34,10 @@ module.exports.run = async (bot, message, args, permissionLevel) => {
 			.addField("Moderator", message.author)
 			.addField("Accepted", user.tag)
 			.addField("Accepted ID", user.id);
-		await mod.send({ embed: acceptedReport }).catch(function () { });
+		await logs.send({ embed: acceptedReport }).catch(function () { });
 		if (matchingreport) matchingreport.delete().catch(function () { });
 	}
-
 };
-
 module.exports.help = {
 	name: "accept"
 };
